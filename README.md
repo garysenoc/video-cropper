@@ -1,38 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Video Cropper
+
+A browser-based video cropping tool built with Next.js, React, and FFmpeg WebAssembly. Trim videos to specific time ranges and add watermarks — all client-side with no server processing required.
+
+## Features
+
+- **Video Upload** — Supports MP4, WebM, MOV, and AVI formats
+- **Interactive Timeline** — Drag start/end handles on a visual timeline to select the crop range
+- **Manual Time Input** — Enter precise start and end times in `m:ss` format
+- **Video Preview** — Built-in HTML5 video player for previewing before cropping
+- **Watermark Overlay** — Automatically adds "FlipTop Clips" and "Like our videos / Follow our page" watermarks
+- **Progress Tracking** — Real-time progress bar and log messages during processing
+- **Automatic Download** — Cropped video downloads automatically upon completion
+- **Fully Client-Side** — All video processing runs in the browser via FFmpeg WebAssembly
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| [Next.js](https://nextjs.org) 16 | React framework |
+| [React](https://react.dev) 19 | UI library |
+| [TypeScript](https://www.typescriptlang.org) 5 | Type safety |
+| [Tailwind CSS](https://tailwindcss.com) 4 | Styling |
+| [@ffmpeg/ffmpeg](https://ffmpegwasm.netlify.app) | Client-side video processing (WebAssembly) |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd crop-video
+
+# Install dependencies
+npm install
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## How It Works
 
-To learn more about Next.js, take a look at the following resources:
+1. **Upload** — Select a video file from your device
+2. **Select Range** — Use the interactive timeline scrubber or type exact times to set start and end points
+3. **Crop & Download** — Click the button to process the video; FFmpeg trims the clip and applies watermarks
+4. **Download** — The cropped video automatically downloads as `cropped_[original_name]`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+├── layout.tsx       # Root layout with metadata and fonts
+├── page.tsx         # Main video cropper page (single-page app)
+└── globals.css      # Global styles and Tailwind theme
+```
 
-## Deploy on Vercel
+The app is a single-page application. All logic — file handling, timeline interaction, FFmpeg processing, watermark generation (via Canvas API), and download — lives in `app/page.tsx`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+FFmpeg loads its WebAssembly core from a CDN at runtime and processes videos entirely in the browser using a virtual filesystem.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# video-cropper
-# video-cropper
+## Project Structure
+
+```
+crop-video/
+├── app/
+│   ├── layout.tsx          # Root layout, metadata, fonts
+│   ├── page.tsx            # Main cropper component (~440 lines)
+│   └── globals.css         # Tailwind imports and theme
+├── public/                 # Static assets
+├── package.json            # Dependencies and scripts
+├── tsconfig.json           # TypeScript config
+├── next.config.ts          # Next.js config
+├── postcss.config.mjs      # PostCSS / Tailwind config
+├── eslint.config.mjs       # ESLint config
+└── README.md
+```
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | Create production build |
+| `npm start` | Run production server |
+| `npm run lint` | Run ESLint |
+
+## License
+
+This project is private.
